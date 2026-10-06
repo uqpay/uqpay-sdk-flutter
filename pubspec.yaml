@@ -61,7 +61,7 @@ dev_dependencies:
   # Test-only: parses lib/ so the public API snapshot records member
   # signatures, and the source-hygiene test can inspect `.name` accesses
   # ^10.0.1 is the newest line Flutter 3.41's pinned `meta` allows.
-  analyzer: ^10.0.1
+  analyzer: ">=10.0.1 <15.0.0"
   flutter_test:
     sdk: flutter
   # Strict lint baseline. ^10.2.0 is the newest line that supports the
