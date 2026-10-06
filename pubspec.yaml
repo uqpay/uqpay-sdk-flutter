@@ -71,7 +71,7 @@ dev_dependencies:
   shared_preferences_platform_interface: ^2.4.2
   # Strict lint baseline. ^10.2.0 is the newest line that supports the
   # Dart 3.11 floor above; 10.3.0 requires Dart 3.12.
-  very_good_analysis: ^10.2.0
+  very_good_analysis: ">=10.2.0 <12.0.0"
   # Test-only: lets the real 3-D Secure webview page run in widget tests
   # through a fake WebViewPlatform. The SDK itself never imports it.
   webview_flutter_platform_interface: ^2.15.1
