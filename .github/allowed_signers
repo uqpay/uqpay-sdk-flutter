@@ -1,0 +1,32 @@
+# Maintainer keys trusted to sign release tags.
+#
+# publish.yaml runs `git verify-tag` on every pushed `v*` tag against THIS
+# file as it exists on `main` (never the copy inside the tag being checked,
+# so a tag cannot vouch for itself). An unsigned tag, or one signed by a key
+# not listed here, never reaches pub.dev.
+#
+# Format (one line per key; see `man ssh-keygen`, "ALLOWED SIGNERS"):
+#
+#   <tagger email> namespaces="git" <key type> <public key>
+#
+# e.g.
+#
+#   maintainer@uqpay.com namespaces="git" ssh-ed25519 AAAAC3Nza...
+#
+# The email must equal the tagger email git records (`git config user.email`
+# when the tag is made). Add or remove keys only through a reviewed PR to
+# main.
+#
+# Maintainer setup, once per machine:
+#
+#   git config --global gpg.format ssh
+#   git config --global user.signingkey ~/.ssh/id_ed25519.pub
+#   # then append your PUBLIC key line here, in a PR.
+#
+# Cutting a release:
+#
+#   git tag -s v1.2.3 -m "uqpay_sdk_flutter 1.2.3"   # -s = signed
+#   git -c gpg.ssh.allowedSignersFile=.github/allowed_signers verify-tag v1.2.3
+#   git push origin v1.2.3
+#
+# NO KEYS ARE LISTED YET: until a maintainer adds one, every tag is refused.

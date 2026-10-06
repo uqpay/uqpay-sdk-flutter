@@ -1,0 +1,77 @@
+name: uqpay_sdk_flutter
+description: >-
+  Accept card, wallet and QR payments in your Flutter app with UQPAY. Pure Dart
+  drop-in payment sheet plus a typed headless API for Android, iOS and web.
+version: 1.0.0-rc.1
+repository: https://github.com/uqpay/uqpay-sdk-flutter
+issue_tracker: https://github.com/uqpay/uqpay-sdk-flutter/issues
+documentation: https://github.com/uqpay/uqpay-sdk-flutter/tree/main/doc
+
+topics:
+  - payments
+  - payment
+  - checkout
+  - card
+  - ecommerce
+
+# Declared platform support is exactly android + ios + web. Desktop is out
+# of scope and the SDK fails loudly on it.
+#
+# This top-level `platforms` key is required rather than inferred: the package
+# is not a plugin (zero first-party native code), so pub would otherwise
+# derive support from the dependency graph, where `webview_flutter` supports
+# android/ios/macos and would both drop `web` and add `macos`.
+platforms:
+  android:
+  ios:
+  web:
+
+# Version floors.
+#
+# Flutter `>=3.41.0` is "stable N-2" at the time of the first release: the stable minors
+# are 3.47 (current), 3.44 and 3.41, so 3.41.0 is the oldest of the three.
+# Dart `^3.11.0` is the SDK that shipped with Flutter 3.41 (3.41.x -> Dart
+# 3.11.x), so the two floors describe the same toolchain rather than two
+# independent guesses. The caret keeps us inside Dart 3.x.
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.41.0"
+
+# A deliberately short list. Every constraint is a caret range — never pinned,
+# never `any`. Apple Pay / Google Pay (`pay`) is not part of this version.
+dependencies:
+  flutter:
+    sdk: flutter
+  # All networking, behind our own client seam.
+  http: ^1.6.0
+  # Currency/number/date formatting only — never amount arithmetic.
+  #
+  # The floor is 0.20.2, not the newest 0.20.3: `flutter_localizations` pins
+  # `intl: 0.20.2` exactly on Flutter 3.41, so a floor of ^0.20.3 would make
+  # `pub get` unsolvable for any merchant who localises their app.
+  intl: ^0.20.2
+  # Idempotency pins + in-flight intent recovery (§9). localStorage on web.
+  shared_preferences: ^2.5.5
+  # Wallet deep links and the external 3DS fallback.
+  url_launcher: ^6.3.2
+  # 3DS challenge on mobile only, behind a conditional import.
+  webview_flutter: ^4.14.1
+
+dev_dependencies:
+  # Test-only: parses lib/ so the public API snapshot records member
+  # signatures, and the source-hygiene test can inspect `.name` accesses
+  # ^10.0.1 is the newest line Flutter 3.41's pinned `meta` allows.
+  analyzer: ^10.0.1
+  flutter_test:
+    sdk: flutter
+  # Strict lint baseline. ^10.2.0 is the newest line that supports the
+  # Dart 3.11 floor above; 10.3.0 requires Dart 3.12.
+  # Test-only: the in-memory SharedPreferencesAsync backend, so the real
+  # storage adapter is exercised in unit tests.
+  shared_preferences_platform_interface: ^2.4.2
+  # Strict lint baseline. ^10.2.0 is the newest line that supports the
+  # Dart 3.11 floor above; 10.3.0 requires Dart 3.12.
+  very_good_analysis: ^10.2.0
+  # Test-only: lets the real 3-D Secure webview page run in widget tests
+  # through a fake WebViewPlatform. The SDK itself never imports it.
+  webview_flutter_platform_interface: ^2.15.1

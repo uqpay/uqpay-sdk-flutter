@@ -1,0 +1,201 @@
+name: Publish
+
+# FIRST RELEASE IS MANUAL. pub.dev automated publishing can only be enabled
+# on an existing package's admin page (pub.dev/packages/<name>/admin), so the
+# very first version, 1.0.0-rc.1, must be published by hand with
+# `dart pub publish` from an account that is a member of the verified
+# publisher (then transfer the package to that publisher if it was not
+# uploaded under it). After that, on the admin page enable "Automated
+# publishing" from GitHub Actions with repository `uqpay/uqpay-sdk-flutter`,
+# tag pattern `v{{version}}`, and "Require GitHub Actions environment" set to
+# `pub.dev`. This workflow then publishes every later version.
+#
+# Publishes to pub.dev when a release tag is pushed. In order:
+#
+#   1. signed tag  — `git verify-tag` against .github/allowed_signers as it
+#                    is on main (see that file for maintainer setup); the
+#                    tag must be annotated, SSH-signed by a listed key, and
+#                    point at a commit on main;
+#   2. tag == pubspec.yaml `version:` (v1.2.3 <-> 1.2.3);
+#   3. analyze -> test -> goldens -> coverage -> pana (160/160) -> dry run,
+#      all on the exact tagged commit, on macOS (the goldens are rendered
+#      there, see ci.yaml `test-macos`);
+#   4. publish — a separate job that alone can mint the pub.dev OIDC token,
+#      and which re-checks the signed tag before it does.
+#
+# (Format and the example platform builds run in ci.yaml on main.)
+#
+# Authentication is pub.dev automated publishing via GitHub OIDC: no
+# credentials are stored here. The OIDC token is obtained by
+# dart-lang/setup-dart, which must run in this job.
+#
+# Supply chain: this job can mint a pub.dev publishing token, so every action
+# is pinned to a full commit SHA (`# vX.Y.Z` names the release) and no build
+# cache is restored. Protect the `pub.dev` GitHub environment with required
+# reviewers and restrict it to `v*` tags.
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Only the publish job gets `id-token: write`.
+permissions:
+  contents: read
+
+env:
+  UQPAY_ENVIRONMENT: sandbox
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Everything that must be green before a release, on the tagged commit.
+  # No OIDC token is available to this job.
+  # ---------------------------------------------------------------------------
+  verify:
+    name: verify ${{ github.ref_name }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # actions/checkout can leave a lightweight ref for the pushed tag;
+      # re-fetch the real (annotated, signed) tag object and main.
+      - name: Fetch the tag object and main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --force --no-tags origin \
+            "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}" \
+            "refs/heads/main:refs/remotes/origin/main"
+
+      - name: Tag is signed by a maintainer and is on main
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed="$RUNNER_TEMP/allowed_signers"
+          git show refs/remotes/origin/main:.github/allowed_signers > "$allowed"
+          .github/scripts/verify_release_tag.sh "$GITHUB_REF_NAME" "$allowed"
+
+      - name: Tag must match pubspec.yaml version
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(sed -n 's/^version:[[:space:]]*//p' pubspec.yaml | head -n1 | tr -d '[:space:]')"
+          echo "tag=$tag pubspec=$version"
+          if [[ "$tag" != "$version" ]]; then
+            echo "::error file=pubspec.yaml::tag v$tag does not match pubspec.yaml version $version"
+            exit 1
+          fi
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+
+      - run: flutter --version
+
+      - name: Pub get (package)
+        run: flutter pub get
+
+      - name: Pub get (example)
+        run: flutter pub get
+        working-directory: example
+
+      - name: Pub get (reference backend)
+        run: dart pub get
+        working-directory: example/backend
+
+      # No format step: this job runs on the newest stable, whose formatter
+      # can differ from the floor's. Formatting is enforced by ci.yaml on the
+      # pinned floor leg before anything reaches main.
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+
+      - name: Test (full suite, goldens included)
+        run: flutter test --coverage
+
+      - name: Goldens
+        shell: bash
+        run: |
+          set -euo pipefail
+          files="$(.github/scripts/test_files.sh golden)"
+          [[ -n "$files" ]] || { echo "::error::no golden tests found"; exit 1; }
+          # shellcheck disable=SC2086
+          flutter test $files
+
+      - name: Coverage thresholds
+        run: dart run tool/check_coverage.dart
+
+      - name: pana (160/160 required)
+        shell: bash
+        run: |
+          dart pub global activate pana
+          dart pub global run pana --no-warning --exit-code-threshold 0 --json . \
+            | tee pana-report.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pana-report-${{ github.ref_name }}
+          path: pana-report.json
+
+      - name: Test (example)
+        run: flutter test
+        working-directory: example
+
+      - name: Test (reference backend)
+        run: dart test
+        working-directory: example/backend
+
+      - name: Publish dry run
+        run: dart pub publish --dry-run
+
+  # ---------------------------------------------------------------------------
+  # The only job that can mint a pub.dev token. It re-verifies the signed tag
+  # (cheap, and this job must not trust anything but the protected
+  # environment and the tag itself) and publishes.
+  # ---------------------------------------------------------------------------
+  publish:
+    name: publish ${{ github.ref_name }}
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: pub.dev
+    permissions:
+      id-token: write # pub.dev OIDC token exchange
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Fetch the tag object and main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --force --no-tags origin \
+            "refs/tags/${GITHUB_REF_NAME}:refs/tags/${GITHUB_REF_NAME}" \
+            "refs/heads/main:refs/remotes/origin/main"
+
+      - name: Tag is signed by a maintainer and is on main
+        shell: bash
+        run: |
+          set -euo pipefail
+          allowed="$RUNNER_TEMP/allowed_signers"
+          git show refs/remotes/origin/main:.github/allowed_signers > "$allowed"
+          .github/scripts/verify_release_tag.sh "$GITHUB_REF_NAME" "$allowed"
+
+      # Registers the pub.dev OIDC token (`dart pub token add`). It runs
+      # BEFORE the Flutter step so Flutter's own `dart` ends up first on PATH
+      # for everything below, while the registered token is still used.
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+
+      - name: Pub get (package)
+        run: flutter pub get
+
+      - name: Publish dry run
+        run: dart pub publish --dry-run
+
+      - name: Publish to pub.dev
+        run: dart pub publish --force

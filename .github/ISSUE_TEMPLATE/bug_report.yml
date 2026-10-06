@@ -1,0 +1,111 @@
+name: Bug report
+description: Report a reproducible bug or regression in uqpay_sdk_flutter.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+        **Never paste card numbers, CVCs, API keys, auth tokens, `.env`
+        contents or customer personal data** — not here, not in logs or
+        screenshots. Use sandbox test cards, and mask anything you must
+        reference (for example `•••• 1234`). Security problems go to
+        [private vulnerability reporting](https://github.com/uqpay/uqpay-sdk-flutter/security/advisories/new),
+        not a public issue.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I reproduced this on the latest published version of uqpay_sdk_flutter.
+          required: true
+        - label: I searched existing issues for a duplicate.
+          required: true
+        - label: This report contains no card numbers, tokens, API keys or customer personal data.
+          required: true
+  - type: input
+    id: sdk-version
+    attributes:
+      label: SDK version
+      description: The uqpay_sdk_flutter version from your pubspec.lock.
+      placeholder: 1.0.0-rc.1
+    validations:
+      required: true
+  - type: textarea
+    id: flutter-version
+    attributes:
+      label: Flutter version
+      description: Paste the output of `flutter --version`.
+      render: shell
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - Web
+    validations:
+      required: true
+  - type: input
+    id: os-device
+    attributes:
+      label: OS / browser version and device model
+      placeholder: Android 15, Pixel 8 / iOS 18.2, iPhone 15 / Chrome 140
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: UQPAY environment
+      options:
+        - sandbox
+        - production
+    validations:
+      required: true
+  - type: input
+    id: intent-id
+    attributes:
+      label: Payment intent id
+      description: The intent id involved, if any. It identifies the payment without exposing card data.
+      placeholder: pi_...
+  - type: input
+    id: trace-id
+    attributes:
+      label: x-trace-id
+      description: "`UqpayError.traceId` (the `x-trace-id` response header) of the failing request, if any."
+  - type: input
+    id: error-code
+    attributes:
+      label: UqpayError code and developerMessage
+      description: For example `card_declined`. Check the developerMessage for anything sensitive before pasting it.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A minimal code sample or a link to a reproduction repository helps most.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: SDK logs
+      description: |
+        With `UqpaySdk.init(loggingEnabled: true)` the SDK logs only method, path, status, trace id,
+        intent id and flow phase — never bodies, card data or tokens. Do not add your own app logs
+        that may contain sensitive values.
+      render: shell

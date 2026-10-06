@@ -1,0 +1,48 @@
+# Strict analysis baseline for uqpay_sdk_flutter.
+#
+# `lib/` has exactly one `ignore:` comment and no `ignore_for_file:`:
+# `one_member_abstracts` on `UqpayChallengePresenter`
+# (lib/src/three_ds/uqpay_challenge_presenter.dart), justified on the same
+# line. Any new ignore must carry a one-line justification on the same line;
+# code review rejects a bare ignore.
+include: package:very_good_analysis/analysis_options.10.2.0.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Every public member must be documented, and CI must fail on a
+    # missing doc rather than merely warn.
+    public_member_api_docs: error
+    # A deprecation from Flutter or a dependency has to be
+    # dealt with, not accumulated across the supported version range.
+    deprecated_member_use: error
+    deprecated_member_use_from_same_package: error
+  exclude:
+    # Third-party reference clones — prior art we read, never code we ship.
+    # Gitignored and excluded from the published archive via .pubignore.
+    - docs/**
+    # Generated example-app scaffolding is not part of the published surface.
+    - example/build/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - build/**
+
+linter:
+  rules:
+    # Documentation and public-surface hygiene (§2).
+    public_member_api_docs: true
+    comment_references: true
+    # Amount arithmetic must never route through a double.
+    avoid_double_and_int_checks: true
+    # No implicit dynamic leaking into the public surface.
+    avoid_dynamic_calls: true
+    # Expected outcomes are returned, not thrown.
+    only_throw_errors: true
+    # `print` is never an acceptable output channel in this package.
+    avoid_print: true
+    # Off: `UqpaySdk.init` must stay a static method, not a factory
+    # constructor, so it can gain async setup later without a breaking rename.
+    prefer_constructors_over_static_methods: false

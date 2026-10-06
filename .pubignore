@@ -1,0 +1,41 @@
+# NOTE: when a .pubignore exists pub uses it INSTEAD of .gitignore for this
+# directory, so every ignore that matters for the archive must be repeated here.
+
+# Maintainers' working notes — never shipped. Merchant-facing docs live under
+# doc/ and ARE shipped. Anchored: an unanchored `docs/` would also drop
+# test/docs/ (the drift tests).
+/docs/
+env.template
+.github/
+example/build/
+
+# Local credentials — never committed, never published.
+.env
+example/.env
+example/app.env
+
+# Dart / Flutter build output and tooling state.
+.dart_tool/
+.packages
+build/
+pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Test artefacts
+coverage/
+
+# Golden reference images: 144 PNGs used only by `flutter test`. They are a
+# development asset, not something a merchant should download with the package
+# — they were most of the archive's weight.
+test/goldens/
+
+# Golden-diff output written by a failed `flutter test`; never a deliverable.
+test/sheet/failures/
+test/**/failures/

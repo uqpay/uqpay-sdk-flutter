@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest a new capability or an improvement to uqpay_sdk_flutter.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Please don't include credentials, card data or customer data.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the integration need, not only the API you have in mind.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you would like the SDK to do, with an API sketch if you have one.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and workarounds you have considered
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platforms affected
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - Web
+        - All

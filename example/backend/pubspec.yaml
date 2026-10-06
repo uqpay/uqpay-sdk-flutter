@@ -1,0 +1,19 @@
+name: uqpay_reference_backend
+description: >-
+  Reference merchant backend for the UQPAY Flutter SDK sample app. Mints the
+  UQPAY auth token server-side, creates payment intents, and receives webhooks.
+  Not published; not part of the SDK.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  http: ^1.5.0
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.0

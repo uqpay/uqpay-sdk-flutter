@@ -1,0 +1,33 @@
+name: uqpay_sdk_flutter_example
+description: "Example app for the UQPAY Flutter SDK."
+# Never published — it exists to be read and run.
+publish_to: "none"
+version: 1.0.0+1
+
+# Must match the floors declared by the SDK itself, because this app is the
+# fixture that proves the SDK builds at its own floor.
+environment:
+  sdk: ^3.11.0
+  flutter: ">=3.41.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # The sample app's client for the reference merchant backend in
+  # `example/backend`. The SDK already depends on it, so this adds nothing to
+  # a merchant's dependency graph.
+  http: ^1.6.0
+  # By relative path, so the app always exercises the working tree rather than
+  # a published version.
+  uqpay_sdk_flutter:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # Needed so the shared `analysis_options.yaml` this app includes can resolve
+  # its `package:very_good_analysis/...` import.
+  very_good_analysis: ^10.2.0
+
+flutter:
+  uses-material-design: true

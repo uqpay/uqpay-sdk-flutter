@@ -1,0 +1,916 @@
+# headless.dart
+UqpayAddress
+UqpayAmount
+UqpayAttemptStatus
+UqpayAuthToken
+UqpayAuthenticationData
+UqpayBillingDetails
+UqpayBrowserDetails
+UqpayBrowserInfo
+UqpayCancelReason
+UqpayCardBrand
+UqpayCardDetails
+UqpayCardPaymentMethod
+UqpayChallengeDismissed
+UqpayChallengeFailed
+UqpayChallengeOutcome
+UqpayChallengePresenter
+UqpayChallengeRequest
+UqpayChallengeReturned
+UqpayChallengeTimedOut
+UqpayConfirmPaymentMethod
+UqpayConfirmRequest
+UqpayCustomer
+UqpayDisplayBankDetails
+UqpayDisplayQrCode
+UqpayEnvironment
+UqpayError
+UqpayErrorCode
+UqpayIntentResult
+UqpayIntentRetrieved
+UqpayIntentStatus
+UqpayIntentUnavailable
+UqpayJsonModel
+UqpayLocation
+UqpayMobileDetails
+UqpayNextAction
+UqpayNextActionType
+UqpayPaymentAttempt
+UqpayPaymentCanceled
+UqpayPaymentCompleted
+UqpayPaymentFailed
+UqpayPaymentFlow
+UqpayPaymentIntent
+UqpayPaymentMethod
+UqpayPaymentPending
+UqpayPaymentPhase
+UqpayPaymentResult
+UqpayPaymentStatus
+UqpayPayments
+UqpayRedirectChallengePresenter
+UqpayRedirectIframe
+UqpayRedirectToUrl
+UqpayReturnHandler
+UqpayReturnUrlMatcher
+UqpaySdk
+UqpayThreeDsData
+UqpayThreeDsResult
+UqpayTokenProvider
+UqpayWalletDetails
+
+# uqpay_sdk_flutter.dart
+SystemUqpayClock
+UqpayAddress
+UqpayAmount
+UqpayAppearance
+UqpayAttemptStatus
+UqpayAuthToken
+UqpayAuthenticationData
+UqpayBillingDetails
+UqpayBrowserDetails
+UqpayBrowserInfo
+UqpayCancelReason
+UqpayCardBrand
+UqpayCardDetails
+UqpayCardOnlyPresentation
+UqpayCardPaymentMethod
+UqpayChallengeDismissed
+UqpayChallengeFailed
+UqpayChallengeOutcome
+UqpayChallengePage
+UqpayChallengePresenter
+UqpayChallengeRequest
+UqpayChallengeReturned
+UqpayChallengeTimedOut
+UqpayClock
+UqpayConfirmPaymentMethod
+UqpayConfirmRequest
+UqpayCustomer
+UqpayDelay
+UqpayDisplayBankDetails
+UqpayDisplayQrCode
+UqpayEnvironment
+UqpayError
+UqpayErrorCode
+UqpayIntentResult
+UqpayIntentRetrieved
+UqpayIntentStatus
+UqpayIntentUnavailable
+UqpayJsonModel
+UqpayLocalizations
+UqpayLocation
+UqpayMethodListPresentation
+UqpayMobileDetails
+UqpayNextAction
+UqpayNextActionType
+UqpayPaymentAttempt
+UqpayPaymentCanceled
+UqpayPaymentCompleted
+UqpayPaymentFailed
+UqpayPaymentFlow
+UqpayPaymentIntent
+UqpayPaymentMethod
+UqpayPaymentPending
+UqpayPaymentPhase
+UqpayPaymentResult
+UqpayPaymentSheet
+UqpayPaymentStatus
+UqpayPayments
+UqpayRedirectChallengePresenter
+UqpayRedirectIframe
+UqpayRedirectToUrl
+UqpayReturnHandler
+UqpayReturnUrlMatcher
+UqpaySdk
+UqpaySheetPresentation
+UqpaySingleWalletPresentation
+UqpayThreeDsData
+UqpayThreeDsResult
+UqpayTokenProvider
+UqpayWalletDetails
+UqpayWebviewChallengePresenter
+
+# signatures
+
+class SystemUqpayClock extends UqpayClock
+  DateTime now()
+  Duration get elapsed
+  Future<void> delay(Duration duration)
+  SystemUqpayClock()
+  UqpayDelay startDelay(Duration duration)
+
+class UqpayAddress extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayAddress({ this.countryCode, this.state, this.city, this.street, this.postcode })
+  factory UqpayAddress.fromJson(Map<String, Object?> json)
+  final String? city
+  final String? countryCode
+  final String? postcode
+  final String? state
+  final String? street
+
+@immutable class UqpayAmount implements Comparable<UqpayAmount>
+  String format({ required String currencyCode, String? locale })
+  String get fractionDigits
+  String get integerDigits
+  String toString()
+  String toWireString()
+  bool get isZero
+  bool operator == (Object other)
+  factory UqpayAmount.parse(String wire)
+  final bool isNegative
+  final int scale
+  int compareTo(UqpayAmount other)
+  int get hashCode
+  static UqpayAmount? tryParse(String wire)
+
+@immutable class UqpayAppearance
+  ThemeData themeFor(ThemeData host)
+  bool operator == (Object other)
+  const UqpayAppearance({ this.colorScheme, this.cornerRadius, this.textTheme, this.payButtonStyle })
+  final ButtonStyle? payButtonStyle
+  final ColorScheme? colorScheme
+  final TextTheme? textTheme
+  final double? cornerRadius
+  int get hashCode
+
+@immutable class UqpayAttemptStatus
+  String toString()
+  bool get isSuccess
+  bool get isTerminal
+  bool get isUnknown
+  bool operator == (Object other)
+  factory UqpayAttemptStatus.fromRaw(String raw)
+  final String raw
+  int get hashCode
+  static const List<UqpayAttemptStatus> known = <UqpayAttemptStatus>[initiated, authenticationRedirected, pendingAuthorization, authorized, captureRequested, settled, succeeded, cancelled, expired, failed]
+  static const UqpayAttemptStatus authenticationRedirected = UqpayAttemptStatus._('AUTHENTICATION_REDIRECTED')
+  static const UqpayAttemptStatus authorized = UqpayAttemptStatus._('AUTHORIZED')
+  static const UqpayAttemptStatus cancelled = UqpayAttemptStatus._('CANCELLED')
+  static const UqpayAttemptStatus captureRequested = UqpayAttemptStatus._('CAPTURE_REQUESTED')
+  static const UqpayAttemptStatus expired = UqpayAttemptStatus._('EXPIRED')
+  static const UqpayAttemptStatus failed = UqpayAttemptStatus._('FAILED')
+  static const UqpayAttemptStatus initiated = UqpayAttemptStatus._('INITIATED')
+  static const UqpayAttemptStatus pendingAuthorization = UqpayAttemptStatus._('PENDING_AUTHORIZATION')
+  static const UqpayAttemptStatus settled = UqpayAttemptStatus._('SETTLED')
+  static const UqpayAttemptStatus succeeded = UqpayAttemptStatus._('SUCCEEDED')
+
+@immutable class UqpayAuthToken
+  String toString()
+  UqpayAuthToken({ required this.value, this.expiresAt })
+  bool operator == (Object other)
+  factory UqpayAuthToken.fromJson(Map<String, Object?> json)
+  final DateTime? expiresAt
+  final String value
+  int get hashCode
+
+class UqpayAuthenticationData extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayAuthenticationData({ this.cvvResult, this.avsResult, this.threeDs })
+  factory UqpayAuthenticationData.fromJson(Map<String, Object?> json)
+  final String? avsResult
+  final String? cvvResult
+  final UqpayThreeDsResult? threeDs
+
+class UqpayBillingDetails extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  UqpayBillingDetails withNamesFrom(String cardholderName)
+  const UqpayBillingDetails({ this.firstName, this.lastName, this.email, this.phoneNumber, this.address })
+  factory UqpayBillingDetails.fromJson(Map<String, Object?> json)
+  final String? email
+  final String? firstName
+  final String? lastName
+  final String? phoneNumber
+  final UqpayAddress? address
+
+class UqpayBrowserDetails extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayBrowserDetails({ required this.userAgent, this.javaEnabled = false, this.javascriptEnabled = true, this.cookieEnabled = true, this.plugins = const <String>[], this.doNotTrack = false })
+  factory UqpayBrowserDetails.fromJson(Map<String, Object?> json)
+  final List<String> plugins
+  final String userAgent
+  final bool cookieEnabled
+  final bool doNotTrack
+  final bool javaEnabled
+  final bool javascriptEnabled
+
+class UqpayBrowserInfo extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayBrowserInfo({ required this.browser, required this.deviceId, required this.language, required this.mobile, required this.screenHeight, required this.screenWidth, required this.timezone, this.acceptHeader = '*/*', this.screenColorDepth = 24, this.touchSupport = true, this.location, this.fonts, this.webglVendor, this.webglRenderer, this.hardwareConcurrency, this.deviceMemory })
+  factory UqpayBrowserInfo.fromJson(Map<String, Object?> json)
+  final List<String>? fonts
+  final String acceptHeader
+  final String deviceId
+  final String language
+  final String timezone
+  final String? webglRenderer
+  final String? webglVendor
+  final UqpayBrowserDetails browser
+  final UqpayLocation? location
+  final UqpayMobileDetails mobile
+  final bool touchSupport
+  final int screenColorDepth
+  final int screenHeight
+  final int screenWidth
+  final int? deviceMemory
+  final int? hardwareConcurrency
+  static String normalizeLanguageTag(String locale)
+
+@immutable class UqpayCancelReason
+  String toString()
+  bool get isUnknown
+  bool operator == (Object other)
+  factory UqpayCancelReason.fromRaw(String raw)
+  final String raw
+  int get hashCode
+  static const List<UqpayCancelReason> known = <UqpayCancelReason>[userDismissed, userTappedCancel, merchantCancelled, intentCancelled]
+  static const UqpayCancelReason intentCancelled = UqpayCancelReason._('intent_cancelled')
+  static const UqpayCancelReason merchantCancelled = UqpayCancelReason._('merchant_cancelled')
+  static const UqpayCancelReason userDismissed = UqpayCancelReason._('user_dismissed')
+  static const UqpayCancelReason userTappedCancel = UqpayCancelReason._('user_tapped_cancel')
+
+enum UqpayCardBrand
+  value visa(wireName: 'visa', displayName: 'Visa', cvcLength: 3, validLengths: [13, 16, 19], maxLength: 19)
+  value mastercard(wireName: 'mastercard', displayName: 'Mastercard', cvcLength: 3, validLengths: [16], maxLength: 16)
+  value amex(wireName: 'amex', displayName: 'American Express', cvcLength: 4, validLengths: [15], maxLength: 15)
+  value discover(wireName: 'discover', displayName: 'Discover', cvcLength: 3, validLengths: [16, 17, 18, 19], maxLength: 19)
+  value jcb(wireName: 'jcb', displayName: 'JCB', cvcLength: 3, validLengths: [16, 17, 18, 19], maxLength: 19)
+  value dinersClub(wireName: 'dinersclub', displayName: 'Diners Club', cvcLength: 3, validLengths: [14, 15, 16, 17, 18, 19], maxLength: 19)
+  value unionPay(wireName: 'unionpay', displayName: 'UnionPay', cvcLength: 3, validLengths: [16, 17, 18, 19], maxLength: 19)
+  const UqpayCardBrand({ required this.wireName, required this.displayName, required this.cvcLength, required this.validLengths, required this.maxLength })
+  final List<int> validLengths
+  final String displayName
+  final String wireName
+  final int cvcLength
+  final int maxLength
+  static UqpayCardBrand? detect(String digits)
+
+class UqpayCardDetails extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String get last4
+  String toString()
+  UqpayCardDetails({ required this.cardName, required this.cardNumber, required this.expiryMonth, required this.expiryYear, required this.cvc, required UqpayBillingDetails billing, String? network, this.autoCapture = true, this.authorizationType = 'authorization', this.threeDsAction = 'enforce_3ds', this.threeDs })
+  factory UqpayCardDetails.fromJson(Map<String, Object?> json)
+  final String authorizationType
+  final String cardName
+  final String cardNumber
+  final String cvc
+  final String expiryMonth
+  final String expiryYear
+  final String threeDsAction
+  final String? network
+  final UqpayBillingDetails billing
+  final UqpayThreeDsData? threeDs
+  final bool autoCapture
+  static const int maxCardNameLength = 128
+
+final class UqpayCardOnlyPresentation extends UqpaySheetPresentation
+  String toString()
+  bool operator == (Object other)
+  const UqpayCardOnlyPresentation()
+  int get hashCode
+
+class UqpayCardPaymentMethod extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  const UqpayCardPaymentMethod({ this.cardName, this.maskedCardNumber, this.network, this.billing, this.autoCapture, this.authorizationType, this.threeDsAction, this.threeDs })
+  factory UqpayCardPaymentMethod.fromJson(Map<String, Object?> json)
+  final String? authorizationType
+  final String? cardName
+  final String? maskedCardNumber
+  final String? network
+  final String? threeDsAction
+  final UqpayBillingDetails? billing
+  final UqpayThreeDsData? threeDs
+  final bool? autoCapture
+
+final class UqpayChallengeDismissed extends UqpayChallengeOutcome
+  String toString()
+  const UqpayChallengeDismissed()
+
+final class UqpayChallengeFailed extends UqpayChallengeOutcome
+  String toString()
+  const UqpayChallengeFailed(this.error)
+  final UqpayError error
+
+@immutable sealed class UqpayChallengeOutcome
+  const UqpayChallengeOutcome()
+  const factory UqpayChallengeOutcome.dismissedByUser() = UqpayChallengeDismissed
+  const factory UqpayChallengeOutcome.failed(UqpayError error) = UqpayChallengeFailed
+  const factory UqpayChallengeOutcome.returned(Uri returnUri) = UqpayChallengeReturned
+  const factory UqpayChallengeOutcome.timedOut() = UqpayChallengeTimedOut
+
+class UqpayChallengePage extends StatefulWidget
+  State<UqpayChallengePage> createState()
+  const UqpayChallengePage({ required this.request, super.key, this.clock, this.title })
+  final String? title
+  final UqpayChallengeRequest request
+  final UqpayClock? clock
+
+abstract interface class UqpayChallengePresenter
+  Future<UqpayChallengeOutcome> present(UqpayChallengeRequest request)
+
+@immutable class UqpayChallengeRequest
+  UqpayChallengeRequest copyWith({ String? intentId, UqpayNextAction? action, Uri? returnUrl, Duration? timeout, Future<void>? cancelled })
+  const UqpayChallengeRequest({ required this.intentId, required this.action, required this.returnUrl, this.timeout = defaultTimeout, this.cancelled })
+  final Duration timeout
+  final Future<void>? cancelled
+  final String intentId
+  final UqpayNextAction action
+  final Uri returnUrl
+  static const Duration defaultTimeout = Duration(minutes: 10)
+
+final class UqpayChallengeReturned extends UqpayChallengeOutcome
+  String toString()
+  const UqpayChallengeReturned(this.returnUri)
+  final Uri returnUri
+
+final class UqpayChallengeTimedOut extends UqpayChallengeOutcome
+  String toString()
+  const UqpayChallengeTimedOut()
+
+abstract class UqpayClock
+  DateTime now()
+  Duration get elapsed
+  Future<void> delay(Duration duration)
+  UqpayDelay startDelay(Duration duration)
+  const UqpayClock()
+
+class UqpayConfirmPaymentMethod extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  const UqpayConfirmPaymentMethod.card(UqpayCardDetails details)
+  factory UqpayConfirmPaymentMethod.fromJson(Map<String, Object?> json)
+  factory UqpayConfirmPaymentMethod.wallet(String type, UqpayWalletDetails details)
+  final String type
+  final UqpayCardDetails? card
+  final UqpayWalletDetails? wallet
+
+class UqpayConfirmRequest extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  const UqpayConfirmRequest({ required this.paymentMethod, required this.browserInfo, this.ipAddress })
+  factory UqpayConfirmRequest.fromJson(Map<String, Object?> json)
+  final String? ipAddress
+  final UqpayBrowserInfo browserInfo
+  final UqpayConfirmPaymentMethod paymentMethod
+
+class UqpayCustomer extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  const UqpayCustomer({ this.firstName, this.lastName, this.email, this.phoneNumber, this.description, this.address, this.metadata })
+  factory UqpayCustomer.fromJson(Map<String, Object?> json)
+  final Map<String, String>? metadata
+  final String? description
+  final String? email
+  final String? firstName
+  final String? lastName
+  final String? phoneNumber
+  final UqpayAddress? address
+
+class UqpayDelay
+  UqpayDelay(this.future, void Function() cancel)
+  final Future<void> future
+  void cancel()
+
+class UqpayDisplayBankDetails extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayDisplayBankDetails({ this.bankName, this.accountNumber, this.routingNumber })
+  factory UqpayDisplayBankDetails.fromJson(Map<String, Object?> json)
+  final String? accountNumber
+  final String? bankName
+  final String? routingNumber
+
+class UqpayDisplayQrCode extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  bool get hasRawPayload
+  const UqpayDisplayQrCode({ this.qrCode, this.qrCodeUrl, this.expiresAt })
+  factory UqpayDisplayQrCode.fromJson(Map<String, Object?> json)
+  final String? expiresAt
+  final String? qrCode
+  final String? qrCodeUrl
+
+enum UqpayEnvironment
+  value sandbox('https://api-sandbox.uqpaytech.com')
+  value production('https://api.uqpay.com')
+  Uri get baseUri
+  const UqpayEnvironment(this.baseUrl)
+  final String baseUrl
+
+@immutable class UqpayError
+  String toString()
+  UqpayError copyWith({ int? httpStatus, String? traceId, String? responseId, bool? isRetryable, bool? isOutcomeUnknown })
+  bool get isUnknown
+  bool operator == (Object other)
+  const UqpayError({ required this.code, required this.developerMessage, required this.userMessage, required this.isRetryable, this.isOutcomeUnknown = false, this.httpStatus, this.serverCode, this.serverMessage, this.traceId, this.responseId })
+  final String developerMessage
+  final String userMessage
+  final String? responseId
+  final String? serverCode
+  final String? serverMessage
+  final String? traceId
+  final UqpayErrorCode code
+  final bool isOutcomeUnknown
+  final bool isRetryable
+  final int? httpStatus
+  int get hashCode
+
+@immutable class UqpayErrorCode
+  String toString()
+  bool get isUnknown
+  bool operator == (Object other)
+  factory UqpayErrorCode.fromRaw(String raw)
+  final String raw
+  int get hashCode
+  static const List<UqpayErrorCode> known = <UqpayErrorCode>[cardDeclined, insufficientFunds, invalidPaymentMethod, threeDsFailed, cancelled, authenticationFailed, invalidConfiguration, networkError, dnsFailure, timeout, tlsFailure, serverError, rateLimited, malformedResponse, unknown]
+  static const UqpayErrorCode authenticationFailed = UqpayErrorCode._('authentication_failed')
+  static const UqpayErrorCode cancelled = UqpayErrorCode._('cancelled')
+  static const UqpayErrorCode cardDeclined = UqpayErrorCode._('card_declined')
+  static const UqpayErrorCode dnsFailure = UqpayErrorCode._('dns_failure')
+  static const UqpayErrorCode insufficientFunds = UqpayErrorCode._('insufficient_funds')
+  static const UqpayErrorCode invalidConfiguration = UqpayErrorCode._('invalid_configuration')
+  static const UqpayErrorCode invalidPaymentMethod = UqpayErrorCode._('invalid_payment_method')
+  static const UqpayErrorCode malformedResponse = UqpayErrorCode._('malformed_response')
+  static const UqpayErrorCode networkError = UqpayErrorCode._('network_error')
+  static const UqpayErrorCode rateLimited = UqpayErrorCode._('rate_limited')
+  static const UqpayErrorCode serverError = UqpayErrorCode._('server_error')
+  static const UqpayErrorCode threeDsFailed = UqpayErrorCode._('3ds_failed')
+  static const UqpayErrorCode timeout = UqpayErrorCode._('timeout')
+  static const UqpayErrorCode tlsFailure = UqpayErrorCode._('tls_failure')
+  static const UqpayErrorCode unknown = UqpayErrorCode._('unknown')
+
+@immutable sealed class UqpayIntentResult
+  const UqpayIntentResult()
+
+final class UqpayIntentRetrieved extends UqpayIntentResult
+  String toString()
+  const UqpayIntentRetrieved(this.intent)
+  final UqpayPaymentIntent intent
+
+@immutable class UqpayIntentStatus
+  String toString()
+  bool get isCancelled
+  bool get isSuccess
+  bool get isTerminal
+  bool get isUnknown
+  bool get shouldPoll
+  bool operator == (Object other)
+  factory UqpayIntentStatus.fromRaw(String raw)
+  final String raw
+  int get hashCode
+  static const List<UqpayIntentStatus> known = <UqpayIntentStatus>[requiresPaymentMethod, requiresCustomerAction, requiresCapture, pending, processing, succeeded, cancelled, failed]
+  static const UqpayIntentStatus cancelled = UqpayIntentStatus._('CANCELLED')
+  static const UqpayIntentStatus failed = UqpayIntentStatus._('FAILED')
+  static const UqpayIntentStatus pending = UqpayIntentStatus._('PENDING')
+  static const UqpayIntentStatus processing = UqpayIntentStatus._('PROCESSING')
+  static const UqpayIntentStatus requiresCapture = UqpayIntentStatus._('REQUIRES_CAPTURE')
+  static const UqpayIntentStatus requiresCustomerAction = UqpayIntentStatus._('REQUIRES_CUSTOMER_ACTION')
+  static const UqpayIntentStatus requiresPaymentMethod = UqpayIntentStatus._('REQUIRES_PAYMENT_METHOD')
+  static const UqpayIntentStatus succeeded = UqpayIntentStatus._('SUCCEEDED')
+
+final class UqpayIntentUnavailable extends UqpayIntentResult
+  String toString()
+  const UqpayIntentUnavailable(this.error)
+  final UqpayError error
+
+@immutable abstract class UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toCanonicalJson()
+  String toString()
+  bool operator == (Object other)
+  const UqpayJsonModel()
+  int get hashCode
+
+class UqpayLocalizations
+  String get accountNumberLabel
+  String get awaitingOutcomeBody
+  String get awaitingOutcomeTitle
+  String get bankDetailsBody
+  String get bankDetailsTitle
+  String get bankNameLabel
+  String get billingAddressTitle
+  String get billingCityLabel
+  String get billingCountryLabel
+  String get billingEmailLabel
+  String get billingPostcodeLabel
+  String get billingStateLabel
+  String get billingStreetLabel
+  String get cancel
+  String get canceledBody
+  String get canceledTitle
+  String get cannotCloseWhileProcessing
+  String get cardDetailsTitle
+  String get cardNumberLabel
+  String get cardholderNameLabel
+  String get chooseMethodTitle
+  String get close
+  String get dismissBarrierLabel
+  String get done
+  String get dragHandleLabel
+  String get errorCardExpired
+  String get errorCityRequired
+  String get errorCountryRequired
+  String get errorInvalidCardNumber
+  String get errorInvalidEmail
+  String get errorInvalidExpiry
+  String get errorInvalidSecurityCode
+  String get errorNameRequired
+  String get errorNameTooLong
+  String get errorPostcodeRequired
+  String get errorStateRequired
+  String get errorStreetRequired
+  String get expiryHint
+  String get expiryLabel
+  String get failedTitle
+  String get loadFailedTitle
+  String get loadingPayment
+  String get noMethodsBody
+  String get noMethodsTitle
+  String get paySheetTitle
+  String get pendingBody
+  String get pendingTitle
+  String get processingBody
+  String get processingTitle
+  String get qrCodeSemanticLabel
+  String get qrExpiredBody
+  String get qrExpiredTitle
+  String get qrImageLoadFailed
+  String get qrInstructionAnyApp
+  String get retry
+  String get routingNumberLabel
+  String get securityCodeLabel
+  String get successBody
+  String get successTitle
+  String get testModeBanner
+  String get testModeBannerSemantics
+  String get verificationTitle
+  String get verifyingBody
+  String get verifyingTitle
+  String get webCardOnlyBody
+  String get webCardUnavailableNotice
+  String methodDisplayName(String type)
+  String payAmount(String amount)
+  String qrExpiresIn(String time)
+  String qrInstruction(String method)
+  const UqpayLocalizations()
+  static UqpayLocalizations of(BuildContext context)
+  static const LocalizationsDelegate<UqpayLocalizations> delegate = _UqpayLocalizationsDelegate()
+
+class UqpayLocation extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayLocation({ required this.lat, required this.lon, this.accuracy })
+  factory UqpayLocation.fromJson(Map<String, Object?> json)
+  final String lat
+  final String lon
+  final int? accuracy
+
+final class UqpayMethodListPresentation extends UqpaySheetPresentation
+  String toString()
+  bool operator == (Object other)
+  const UqpayMethodListPresentation()
+  int get hashCode
+
+class UqpayMobileDetails extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayMobileDetails({ required this.deviceModel, required this.osType, required this.osVersion, this.carrier })
+  factory UqpayMobileDetails.fromJson(Map<String, Object?> json)
+  final String deviceModel
+  final String osType
+  final String osVersion
+  final String? carrier
+
+class UqpayNextAction extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  UqpayNextActionType? get type
+  const UqpayNextAction({ this.rawType, this.redirectToUrl, this.displayQrCode, this.displayBankDetails, this.redirectIframe })
+  factory UqpayNextAction.fromJson(Map<String, Object?> json)
+  final String? rawType
+  final UqpayDisplayBankDetails? displayBankDetails
+  final UqpayDisplayQrCode? displayQrCode
+  final UqpayRedirectIframe? redirectIframe
+  final UqpayRedirectToUrl? redirectToUrl
+
+@immutable class UqpayNextActionType
+  String toString()
+  bool get isUnknown
+  bool operator == (Object other)
+  factory UqpayNextActionType.fromRaw(String raw)
+  final String raw
+  int get hashCode
+  static const List<UqpayNextActionType> known = <UqpayNextActionType>[redirectToUrl, displayQrCode, displayBankDetails, redirectIframe]
+  static const UqpayNextActionType displayBankDetails = UqpayNextActionType._('display_bank_details')
+  static const UqpayNextActionType displayQrCode = UqpayNextActionType._('display_qr_code')
+  static const UqpayNextActionType redirectIframe = UqpayNextActionType._('redirect_iframe')
+  static const UqpayNextActionType redirectToUrl = UqpayNextActionType._('redirect_to_url')
+
+class UqpayPaymentAttempt extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  bool get isFailed
+  const UqpayPaymentAttempt({ this.attemptId, this.paymentIntentId, this.status, this.amount, this.currency, this.capturedAmount, this.refundedAmount, this.authCode, this.arn, this.rrn, this.adviceCode, this.failureCode, this.failureMessage, this.authenticationData, this.createTime, this.updateTime, this.completeTime, this.cancelTime, this.cancellationReason })
+  factory UqpayPaymentAttempt.fromJson(Map<String, Object?> json)
+  final String? adviceCode
+  final String? arn
+  final String? attemptId
+  final String? authCode
+  final String? cancelTime
+  final String? cancellationReason
+  final String? completeTime
+  final String? createTime
+  final String? currency
+  final String? failureCode
+  final String? failureMessage
+  final String? paymentIntentId
+  final String? rrn
+  final String? updateTime
+  final UqpayAmount? amount
+  final UqpayAmount? capturedAmount
+  final UqpayAmount? refundedAmount
+  final UqpayAttemptStatus? status
+  final UqpayAuthenticationData? authenticationData
+
+final class UqpayPaymentCanceled extends UqpayPaymentResult
+  String toString()
+  const UqpayPaymentCanceled({ required this.intentId, required this.reason, this.intent })
+  final String intentId
+  final UqpayCancelReason reason
+  final UqpayPaymentIntent? intent
+
+final class UqpayPaymentCompleted extends UqpayPaymentResult
+  String get intentId
+  String toString()
+  UqpayIntentStatus get status
+  UqpayPaymentAttempt? get attempt
+  UqpayPaymentIntent get intent
+  const UqpayPaymentCompleted({ required UqpayPaymentIntent intent })
+
+final class UqpayPaymentFailed extends UqpayPaymentResult
+  String toString()
+  const UqpayPaymentFailed({ required this.intentId, required this.error, this.intent })
+  final String intentId
+  final UqpayError error
+  final UqpayPaymentIntent? intent
+
+class UqpayPaymentFlow
+  @internal UqpayPaymentFlow.internal({ required UqpayApiClient api, required IdempotencyStore store, required UqpayClock clock, required PollingPolicy policy, required Future<UqpayPaymentResult> Function(String intentId) reconciler, required this.intentId, this.request, UqpayChallengePresenter? challengePresenter, Future<String?> Function()? deviceIpResolver, UqpayLogger logger = UqpayLogger.disabled })
+  Future<UqpayPaymentResult> awaitOutcome()
+  Future<UqpayPaymentResult> confirm()
+  Future<UqpayPaymentResult> get result
+  Stream<UqpayPaymentStatus> get status
+  UqpayPaymentIntent? get latestIntent
+  bool get hasStarted
+  bool get isConfirmInFlight
+  bool get isDone
+  bool get isPaused
+  final String intentId
+  final UqpayConfirmRequest? request
+  static const List<Duration> replayLadder = <Duration>[Duration(seconds: 3), Duration(seconds: 6), Duration(seconds: 10)]
+  static const int maxPresentations = 3
+  void cancel(UqpayCancelReason reason)
+  void pause()
+  void resume()
+
+class UqpayPaymentIntent extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  const UqpayPaymentIntent({ required this.id, required this.status, this.amount, this.currency, this.capturedAmount, this.paymentMethod, this.customer, this.customerId, this.cancelTime, this.cancellationReason, this.clientSecret, this.merchantOrderId, this.description, this.metadata, this.nextAction, this.returnUrl, this.createTime, this.updateTime, this.completeTime, this.latestPaymentAttempt, this.availablePaymentMethodTypes })
+  factory UqpayPaymentIntent.fromJson(Map<String, Object?> json)
+  final List<String>? availablePaymentMethodTypes
+  final Map<String, String>? metadata
+  final String id
+  final String? cancelTime
+  final String? cancellationReason
+  final String? clientSecret
+  final String? completeTime
+  final String? createTime
+  final String? currency
+  final String? customerId
+  final String? description
+  final String? merchantOrderId
+  final String? returnUrl
+  final String? updateTime
+  final UqpayAmount? amount
+  final UqpayAmount? capturedAmount
+  final UqpayCustomer? customer
+  final UqpayIntentStatus status
+  final UqpayNextAction? nextAction
+  final UqpayPaymentAttempt? latestPaymentAttempt
+  final UqpayPaymentMethod? paymentMethod
+
+class UqpayPaymentMethod extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  String toString()
+  const UqpayPaymentMethod({ required this.type, this.card })
+  factory UqpayPaymentMethod.fromJson(Map<String, Object?> json)
+  final String type
+  final UqpayCardPaymentMethod? card
+
+final class UqpayPaymentPending extends UqpayPaymentResult
+  Future<UqpayPaymentResult> reconcile()
+  String toString()
+  const UqpayPaymentPending({ required this.intentId, required this.lastKnownStatus, required Future<UqpayPaymentResult> Function() reconcile, this.intent, this.cause })
+  final String intentId
+  final UqpayError? cause
+  final UqpayIntentStatus? lastKnownStatus
+  final UqpayPaymentIntent? intent
+
+@immutable class UqpayPaymentPhase
+  String toString()
+  bool get isUnknown
+  bool operator == (Object other)
+  factory UqpayPaymentPhase.fromRaw(String raw)
+  final String raw
+  int get hashCode
+  static const List<UqpayPaymentPhase> known = <UqpayPaymentPhase>[preparing, confirming, retrying, awaitingCustomerAction, awaitingOutcome, paused, finished]
+  static const UqpayPaymentPhase awaitingCustomerAction = UqpayPaymentPhase._('awaiting_customer_action')
+  static const UqpayPaymentPhase awaitingOutcome = UqpayPaymentPhase._('awaiting_outcome')
+  static const UqpayPaymentPhase confirming = UqpayPaymentPhase._('confirming')
+  static const UqpayPaymentPhase finished = UqpayPaymentPhase._('finished')
+  static const UqpayPaymentPhase paused = UqpayPaymentPhase._('paused')
+  static const UqpayPaymentPhase preparing = UqpayPaymentPhase._('preparing')
+  static const UqpayPaymentPhase retrying = UqpayPaymentPhase._('retrying')
+
+@immutable sealed class UqpayPaymentResult
+  String get intentId
+  UqpayPaymentIntent? get intent
+  const UqpayPaymentResult()
+
+class UqpayPaymentSheet extends StatefulWidget
+  State<UqpayPaymentSheet> createState()
+  const UqpayPaymentSheet({ required this.payments, required this.intentId, required this.returnUrl, this.appearance, this.billingDetails, this.allowedPaymentMethods, this.presentation = const UqpaySheetPresentation.methodList(), this.challengePresenter, this.localizations, this.onResult, this.clock, @visibleForTesting this.isWebPlatform, super.key })
+  final Set<String>? allowedPaymentMethods
+  final String intentId
+  final UqpayAppearance? appearance
+  final UqpayBillingDetails? billingDetails
+  final UqpayChallengePresenter? challengePresenter
+  final UqpayClock? clock
+  final UqpayLocalizations? localizations
+  final UqpayPayments payments
+  final UqpaySheetPresentation presentation
+  final Uri returnUrl
+  final ValueChanged<UqpayPaymentResult>? onResult
+  final bool? isWebPlatform
+  static Future<UqpayPaymentResult> present(BuildContext context, { required UqpayPayments payments, required String intentId, required Uri returnUrl, UqpayAppearance? appearance, UqpayBillingDetails? billingDetails, Set<String>? allowedPaymentMethods, UqpaySheetPresentation presentation = const UqpaySheetPresentation.methodList(), UqpayChallengePresenter? challengePresenter, UqpayLocalizations? localizations, UqpayClock? clock, bool useRootNavigator = true, @visibleForTesting bool? isWebPlatform })
+
+@immutable class UqpayPaymentStatus
+  String toString()
+  UqpayNextAction? get nextAction
+  bool operator == (Object other)
+  const UqpayPaymentStatus({ required this.intentId, required this.phase, this.intent, this.pollCount = 0 })
+  final String intentId
+  final UqpayPaymentIntent? intent
+  final UqpayPaymentPhase phase
+  final int pollCount
+  int get hashCode
+
+class UqpayPayments
+  @visibleForTesting UqpayPayments.withDependencies({ required this.sdk, required UqpayHttpClient httpClient, required UqpayClock clock, required KeyValueStore storage, PollingPolicy? pollingPolicy, Future<String?> Function()? deviceIpResolver })
+  Future<List<String>> unresolvedIntentIds()
+  Future<List<UqpayPaymentResult>> reconcileUnresolved()
+  Future<UqpayIntentResult> retrieveIntent(String intentId)
+  Future<UqpayPaymentResult> awaitOutcome(String intentId, { Duration deadline = defaultOutcomeDeadline })
+  Future<UqpayPaymentResult> cancelIntent(String intentId, { String cancellationReason = defaultCancellationReason })
+  Future<UqpayPaymentResult> confirm(String intentId, UqpayConfirmRequest request, { Duration outcomeDeadline = defaultOutcomeDeadline })
+  Future<UqpayPaymentResult> reconcile(String intentId)
+  UqpayPaymentFlow createFlow({ required String intentId, UqpayConfirmRequest? request, Duration outcomeDeadline = defaultOutcomeDeadline, UqpayChallengePresenter? challengePresenter })
+  factory UqpayPayments.forSdk(UqpaySdk sdk)
+  final UqpaySdk sdk
+  static const Duration defaultOutcomeDeadline = Duration(minutes: 5)
+  static const String defaultCancellationReason = 'requested_by_customer'
+  void close()
+
+class UqpayRedirectChallengePresenter implements UqpayChallengePresenter
+  Future<UqpayChallengeOutcome> present(UqpayChallengeRequest request)
+  UqpayRedirectChallengePresenter({ KeyValueStore? store, Future<bool> Function(Uri url)? launch })
+  static const String pendingIntentKey = 'uqpay.redirect.pending'
+
+class UqpayRedirectIframe extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayRedirectIframe({ this.iframe })
+  factory UqpayRedirectIframe.fromJson(Map<String, Object?> json)
+  final String? iframe
+
+class UqpayRedirectToUrl extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayRedirectToUrl({ this.url, this.returnUrl })
+  factory UqpayRedirectToUrl.fromJson(Map<String, Object?> json)
+  final String? returnUrl
+  final String? url
+
+class UqpayReturnHandler
+  Future<UqpayPaymentResult?> consume(Uri currentUri)
+  UqpayReturnHandler({ required UqpayPayments payments, KeyValueStore? store })
+  static String? intentIdFromUri(Uri uri)
+  static Uri returnUrlFor(Uri returnUrl, String intentId)
+  static const String intentIdParam = 'uqpay_intent'
+
+abstract final class UqpayReturnUrlMatcher
+  static bool matches({ required Uri candidate, required Uri returnUrl })
+
+@immutable class UqpaySdk
+  String toString()
+  bool get usesCustomBaseUrl
+  bool operator == (Object other)
+  final String baseUrl
+  final String? clientId
+  final String? onBehalfOf
+  final UqpayEnvironment environment
+  final UqpayTokenProvider? tokenProvider
+  final bool loggingEnabled
+  final void Function(String line)? logHandler
+  int get hashCode
+  late final UqpayPayments payments
+  static UqpaySdk init({ required UqpayEnvironment environment, UqpayTokenProvider? tokenProvider, String? clientId, String? onBehalfOf, String? baseUrlOverride, bool loggingEnabled = false, void Function(String line)? logHandler })
+
+@immutable sealed class UqpaySheetPresentation
+  const UqpaySheetPresentation()
+  const factory UqpaySheetPresentation.cardOnly() = UqpayCardOnlyPresentation
+  const factory UqpaySheetPresentation.methodList() = UqpayMethodListPresentation
+  const factory UqpaySheetPresentation.singleWallet(String method) = UqpaySingleWalletPresentation
+
+final class UqpaySingleWalletPresentation extends UqpaySheetPresentation
+  String toString()
+  bool operator == (Object other)
+  const UqpaySingleWalletPresentation(this.method)
+  final String method
+  int get hashCode
+  void validate()
+
+class UqpayThreeDsData extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayThreeDsData({ this.returnUrl, this.acsResponse, this.deviceDataCollectionRes, this.dsTransactionId })
+  factory UqpayThreeDsData.fromJson(Map<String, Object?> json)
+  final String? acsResponse
+  final String? deviceDataCollectionRes
+  final String? dsTransactionId
+  final String? returnUrl
+
+class UqpayThreeDsResult extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayThreeDsResult({ this.threeDsVersion, this.cavv, this.eci, this.dsTransactionId, this.authenticationStatus, this.cancellationReason })
+  factory UqpayThreeDsResult.fromJson(Map<String, Object?> json)
+  final String? authenticationStatus
+  final String? cancellationReason
+  final String? cavv
+  final String? dsTransactionId
+  final String? eci
+  final String? threeDsVersion
+
+typedef UqpayTokenProvider = Future<UqpayAuthToken> Function()
+
+class UqpayWalletDetails extends UqpayJsonModel
+  Map<String, Object?> toJson()
+  const UqpayWalletDetails({ this.flow = 'qrcode', this.isPresent = false, this.osType, this.openId, this.shopperName })
+  factory UqpayWalletDetails.fromJson(Map<String, Object?> json)
+  final String flow
+  final String? openId
+  final String? osType
+  final String? shopperName
+  final bool isPresent
+
+class UqpayWebviewChallengePresenter implements UqpayChallengePresenter
+  Future<UqpayChallengeOutcome> present(UqpayChallengeRequest request)
+  UqpayWebviewChallengePresenter({ required NavigatorState Function() navigator, UqpayClock? clock, String? title })
+

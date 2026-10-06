@@ -1,0 +1,14 @@
+# The example app is held to the same strict ruleset as the SDK, so a merchant
+# copying from it is copying code that passes our own gate.
+include: ../analysis_options.yaml
+
+analyzer:
+  errors:
+    # Off here only: an application has no published API surface, so requiring
+    # a dartdoc on every widget would add noise the merchant has to read past.
+    public_member_api_docs: ignore
+
+linter:
+  rules:
+    # Off here only: same reason as above.
+    public_member_api_docs: false
