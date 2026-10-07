@@ -83,7 +83,7 @@ enum UqpayCardBrand {
     cvcLength: 3,
     validLengths: [16, 17, 18, 19],
     maxLength: 19,
-  )
+  ),
   ;
 
   const UqpayCardBrand({

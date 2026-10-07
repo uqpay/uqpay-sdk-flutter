@@ -13,7 +13,7 @@ enum UqpayEnvironment {
   /// The production environment, backed by `https://api.uqpay.com`.
   ///
   /// Real money moves here.
-  production('https://api.uqpay.com')
+  production('https://api.uqpay.com'),
   ;
 
   /// Associates each environment with the API origin it talks to.

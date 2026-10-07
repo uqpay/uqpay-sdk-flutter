@@ -42,7 +42,7 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
-          flutter-version: ${{ matrix.flutter-version == 'stable' && '' || matrix.flutter-version }}
+          flutter-version: ${{ matrix.flutter-version != 'stable' && matrix.flutter-version || '' }}
           cache: true
 
       - run: flutter --version
@@ -131,7 +131,7 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
-          flutter-version: ${{ matrix.flutter-version == 'stable' && '' || matrix.flutter-version }}
+          flutter-version: ${{ matrix.flutter-version != 'stable' && matrix.flutter-version || '' }}
           cache: true
 
       - run: flutter --version
@@ -223,7 +223,7 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
-          flutter-version: ${{ matrix.flutter-version == 'stable' && '' || matrix.flutter-version }}
+          flutter-version: ${{ matrix.flutter-version != 'stable' && matrix.flutter-version || '' }}
           cache: true
       - run: flutter pub get
       - name: Build Android (debug)
@@ -270,7 +270,7 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
-          flutter-version: ${{ matrix.flutter-version == 'stable' && '' || matrix.flutter-version }}
+          flutter-version: ${{ matrix.flutter-version != 'stable' && matrix.flutter-version || '' }}
           cache: true
       - run: flutter pub get
       # The 3.41.0 leg is the exact minimum supported iOS toolchain build.
@@ -305,7 +305,7 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
-          flutter-version: ${{ matrix.flutter-version == 'stable' && '' || matrix.flutter-version }}
+          flutter-version: ${{ matrix.flutter-version != 'stable' && matrix.flutter-version || '' }}
           cache: true
       - name: Create fixture app
         run: flutter create --no-pub --org com.example --project-name dep_fixture --platforms android,ios,web fixture
@@ -363,6 +363,13 @@ jobs:
           changed="$(git diff --name-only "$base" HEAD)"
           echo "Changed files since $base:"
           echo "$changed"
+          # Housekeeping that changes no behaviour (formatting, comments) may
+          # opt out with "[no changelog]" in the HEAD commit message; a
+          # reviewer sees the marker and judges it.
+          if git log -1 --format=%B HEAD | grep -q '\[no changelog\]'; then
+            echo "HEAD opts out with [no changelog]; skipping."
+            exit 0
+          fi
           if grep -q '^lib/' <<<"$changed" && ! grep -qx 'CHANGELOG.md' <<<"$changed"; then
             echo "::error file=CHANGELOG.md::lib/ changed but CHANGELOG.md did not. Add an entry in the same PR."
             exit 1

@@ -14,7 +14,7 @@ enum UqpayQrErrorCorrection {
   quartile(formatBits: 3),
 
   /// Level H — recovers ~30% of codewords.
-  high(formatBits: 2)
+  high(formatBits: 2),
   ;
 
   const UqpayQrErrorCorrection({required this.formatBits});

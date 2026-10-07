@@ -236,7 +236,7 @@ enum _Gesture {
   systemBack('system back / predictive back'),
   maybePop('Navigator.maybePop'),
   tapOutside('tap outside (barrier)'),
-  swipeDown('swipe down on the handle')
+  swipeDown('swipe down on the handle'),
   ;
 
   const _Gesture(this.label);

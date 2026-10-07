@@ -108,7 +108,9 @@ must stay byte-identical to the README block. Change both together.
 request** — CI fails otherwise. Add it under the topmost unreleased version
 heading, written for merchants: what changed for them and what, if anything,
 they must do. A breaking change to the public API follows the rules in
-[STABILITY.md](STABILITY.md).
+[STABILITY.md](STABILITY.md). Housekeeping that changes no behaviour
+(formatting, comments) may opt out by putting `[no changelog]` in the commit
+message; the reviewer judges whether that is honest.
 
 ## Rules that are not negotiable
 
