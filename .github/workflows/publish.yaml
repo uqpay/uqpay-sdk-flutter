@@ -132,7 +132,7 @@ jobs:
           dart pub global activate pana
           dart pub global run pana --no-warning --exit-code-threshold 0 --json . \
             | tee pana-report.json
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: pana-report-${{ github.ref_name }}
           path: pana-report.json
@@ -185,7 +185,7 @@ jobs:
       # Registers the pub.dev OIDC token (`dart pub token add`). It runs
       # BEFORE the Flutter step so Flutter's own `dart` ends up first on PATH
       # for everything below, while the registered token is still used.
-      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+      - uses: dart-lang/setup-dart@2286a0c042b44434fe26d292bbce8d34f7ec662b # v1.8.2
 
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
